@@ -67,11 +67,16 @@
       name: tomcat
       enabled: yes
 
-  - name: create ansible tomcat directory
+  - name: create ansible tomcat root directory
     file:
       path: /usr/share/tomcat/webapps/ROOT
       state: directory
 
+  - name: create ansible tomcat ansible directory
+    file:
+      path: /usr/share/tomcat/webapps/ansible
+      state: directory
+      
   - name: copy static index.html to tomcat webapps/ansible/index.html
     template:
       src: index.html.j2
@@ -150,7 +155,7 @@
     service:
       name: httpd
       enabled: yes
-#  - name: start apache
-#    service:
-#      name: httpd
-#      state: started
+  - name: start apache
+    service:
+      name: httpd
+      state: started
