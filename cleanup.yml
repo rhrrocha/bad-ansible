@@ -1,8 +1,4 @@
 ---
-- name: cleanup
-  hosts: all
-  gather_facts: false
-  become: true
 
 # Deploy Web App
 - import_playbook: ./libs/undeploy-web-app.yml
@@ -15,8 +11,13 @@
   # RPM Packages Repositories
 - import_playbook: ./libs/yum-repo-teardown.yml
 
+- name: Reverse sudoers
+  hosts: all
+  gather_facts: false
+  become: true
+
   tasks:
-    - name: reverse the enabling of sudo without tty for some ansible commands
+    - name: Reverse the enabling of sudo without tty for some ansible commands
       replace:
         path: /etc/sudoers
         regexp: 'Defaults\s*!requiretty'

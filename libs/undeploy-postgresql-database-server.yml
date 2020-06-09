@@ -1,14 +1,14 @@
 ---
 # ./libs/undeploy-postgresql-database-server.yml
 
-- name: Revert Deploy Postgres
+- name: Reverse Deploy Postgres
   hosts: appdbs
   become: true
   vars_files:
     - ../vars/variables.yml
 
   tasks:
-    - name: Revert Start Postgres
+    - name: Reverse Start Postgres
       service:
         name: postgresql.service
         state: stopped
@@ -18,17 +18,18 @@
         path: "{{ postgres_data_dir_path }}/PG_VERSION"
       register: postgres_initialized
 
-    - name: Revert Initilize Postgres
+    - name: Reverse Initilize Postgres
       when: postgres_initialized.stat.exists
-      path: "{{ postgres_data_dir_path }}/PG_VERSION"
-      state: absent
+      file:
+        path: "{{ postgres_data_dir_path }}/PG_VERSION"
+        state: absent
 
-    - name: Revert Enable Postgres at Boot
+    - name: Reverse Enable Postgres at Boot
       service:
         name: postgresql
         enabled: no
 
-    - name: Revert Install Postgres
+    - name: Reverse Install Postgres
       yum:
         name: postgresql-server
         state: absent

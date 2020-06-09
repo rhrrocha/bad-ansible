@@ -1,13 +1,13 @@
 ---
 # ./libs/yum-repo-teardown.yml
 
-- name: Revert Yum repo setup
+- name: Reverse Yum repo setup
   hosts: all
   gather_facts: false # remove later! speeds up testing
   become: true
 
   tasks:
-    - name: Revert Enable YUM Repos
+    - name: Reverse Enable YUM Repos
       file:
         path: /etc/yum.repos.d/open_three-tier-app.repo
         state: absent

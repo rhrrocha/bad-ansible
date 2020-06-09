@@ -1,7 +1,7 @@
 ---
 # ./libs/undeploy-load-balancer.yml
 
-- name: Revert Deploy Load balancer on frontend hosts
+- name: Reverse Deploy Load balancer on frontend hosts
   hosts: frontends
   gather_facts: false # remove later! speeds up testing
   become: true
@@ -9,22 +9,22 @@
     - ../vars/variables.yml
 
   tasks:
-    - name: Revert Start Load balancer
+    - name: Reverse Start Load balancer
       service:
         name: "{{ load_balancer_service }}"
         state: stopped
 
-    - name: Revert Enable Load balancer at boot
+    - name: Reverse Enable Load balancer at boot
       service:
         name: "{{ load_balancer_service }}"
         enabled: no
 
-    - name: Revert Configure Load balancer
+    - name: Reverse Configure Load balancer
       file:
         path: /etc/haproxy/haproxy.cfg
         state: absent
 
-    - name: Revert Install Load balancer
+    - name: Reverse Install Load balancer
       yum:
         name: "{{ load_balancer_service }}"
         state: absent
