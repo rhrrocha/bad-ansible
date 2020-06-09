@@ -17,13 +17,14 @@ defaults
         timeout server 50000
 
 frontend hafrontend
-    bind *:80
+    bind *:{{load_balancer_port}}
     mode http
     default_backend app-servers
 
 backend app-servers
     mode http
-    balance roundrobin
+    balance roundrobincle
     option forwardfor
-    server app1 app1.{{GUID}}.internal:8080 cookie app1 check
-    server app2 app2.{{GUID}}.internal:8080 cookie app2 check
+    {% for app_server in groups['apps'] %}
+      server {{app_server}} {{app_server}}.{{GUID}}.internal:{{app_server_port}} cookie {{app_server}} check
+    {% endfor %}
