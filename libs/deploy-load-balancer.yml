@@ -1,0 +1,28 @@
+---
+# ./libs/deploy-load-balancer.yml
+
+- name: Deploy Load balancer on frontend hosts
+  hosts: frontends
+  gather_facts: false # remove later! speeds up testing
+  become: true
+  vars_files:
+    - ../vars/variables.yml
+
+  tasks:
+    - name: Install Load balancer
+      yum: name="{{ load_balancer_service }}" state=latest
+
+    - name: Configure Load balancer
+      template:
+        src: ./haproxy.cfg.j2
+        dest: /etc/haproxy/haproxy.cfg
+
+    - name: Enable Load balancer at boot
+      service:
+        name: "{{ load_balancer_service }}"
+        enabled: yes
+
+    - name: Start Load balancer
+      service:
+        name: "{{ load_balancer_service }}"
+        state: started

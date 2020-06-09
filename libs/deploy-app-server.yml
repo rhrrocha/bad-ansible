@@ -1,0 +1,25 @@
+---
+# ./libs/deploy-app-server.yml
+
+- name: Deploy App Server
+  hosts: apps
+  gather_facts: false
+  become: true
+  vars_files:
+    - ../vars/variables.yml
+
+  tasks:
+    - name: Install App Server
+      package:
+        name: "{{ app_server_service }}"
+        state: latest
+
+    - name: Enable App Server at boot
+      service:
+        name: "{{ app_server_service }}"
+        enabled: yes
+
+    - name: Create App Server web root directory
+      file:
+        path: "{{ webapp_root_dir }}"
+        state: directory

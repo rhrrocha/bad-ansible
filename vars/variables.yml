@@ -1,0 +1,5 @@
+postgres_data_dir_path: "/var/lib/pgsql/data"
+app_server_service: "tomcat"
+webapp_root_dir: "/usr/share/tomcat/webapps/ROOT"
+http_server_service: httpd
+load_balancer_service: haproxy

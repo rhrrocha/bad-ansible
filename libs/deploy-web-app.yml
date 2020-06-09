@@ -1,0 +1,21 @@
+---
+# ./libs/deploy-web-app.yml
+
+- name: Deploy Web App
+  hosts: apps
+  gather_facts: false
+  become: true
+  vars_files:
+    - ../vars/variables.yml
+
+  tasks:
+    - name: Copy static index.html to the path "{{ webapp_root_dir }}"
+      template:
+        src: index.html.j2
+        dest: "{{ webapp_root_dir }}/index.html"
+        mode: 0644
+
+    - name: Start App Server
+      service:
+        name: "{{ app_server_service }}"
+        state: started

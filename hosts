@@ -1,17 +1,24 @@
-[frontends] 
+[internal:vars]
+GUID="{{ lookup('env', 'GUID') }}"
+
+[frontends]
 frontend1 ansible_host=frontend1."{{ GUID }}".internal
 
-[apps] 
+[apps]
 app1 ansible_host=app1."{{ GUID }}".internal
 app2 ansible_host=app2."{{ GUID }}".internal
 
-[appdbs] 
+[appdbs]
 appdb1 ansible_host=appdb1."{{ GUID }}".internal
 
-[internal:children]
+[threetierapp:children]
 frontends
 apps
 appdbs
 
-[internal:vars]
-GUID="{{ lookup('env', 'GUID') }}"
+[threetierapp:vars]
+timeout=60
+ansible_become=yes
+ansible_user=ec2-user
+ansible_ssh_private_key_file="~/.ssh/"{{ GUID }}"key.pem"
+ansible_ssh_common_args="-o StrictHostKeyChecking=no"

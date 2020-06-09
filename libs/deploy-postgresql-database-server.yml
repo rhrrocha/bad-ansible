@@ -1,0 +1,33 @@
+---
+# ./libs/deploy-postgresql-database-server.yml
+
+- name: Deploy Postgres
+  hosts: appdbs
+  become: true
+  vars_files:
+    - ../vars/variables.yml
+
+  tasks:
+    - name: Install Postgres
+      yum:
+        name: postgresql-server
+        state: latest
+
+    - name: Enable Postgres at Boot
+      service:
+        name: postgresql
+        enabled: yes
+
+    - name: Check if PostgreSQL Database is Initialized
+      stat:
+        path: "{{ postgres_data_dir_path }}/PG_VERSION"
+      register: postgres_initialized
+
+    - name: Initilize Postgres
+      command: postgresql-setup initdb
+      when: not postgres_initialized.stat.exists
+
+    - name: Start Postgres
+      service:
+        name: postgresql.service
+        state: started

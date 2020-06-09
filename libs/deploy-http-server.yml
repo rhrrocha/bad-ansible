@@ -1,0 +1,25 @@
+---
+# ./libs/deploy-http-server.yml
+
+- name: Deploy Http Server
+  hosts: apps
+  gather_facts: false
+  become: true
+  vars_files:
+    - ../vars/variables.yml
+
+  tasks:        
+    - name: Start Http Server
+      service:
+        name: "{{ http_server_service }}"
+        state: stopped
+
+    - name: Enable Http Server at boot
+      service:
+        name: "{{ http_server_service }}"
+        enabled: no
+
+    - name: Install Http Server
+      yum:
+        name: "{{ http_server_service }}"
+        state: absent
