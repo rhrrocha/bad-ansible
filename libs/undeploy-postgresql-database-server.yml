@@ -15,13 +15,13 @@
 
     - name: Check if PostgreSQL Database is Initialized
       stat:
-        path: "{{ postgres_data_dir_path }}/PG_VERSION"
+        path: "{{ postgres_data_dir_path }}"
       register: postgres_initialized
 
     - name: Reverse Initilize Postgres
       when: postgres_initialized.stat.exists
       file:
-        path: "{{ postgres_data_dir_path }}/PG_VERSION"
+        path: "{{ postgres_data_dir_path }}"
         state: absent
 
     - name: Reverse Enable Postgres at Boot
