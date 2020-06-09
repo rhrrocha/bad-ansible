@@ -1,0 +1,20 @@
+---
+# ./libs/undeploy-web-app.yml
+
+- name: Revert Deploy Web App
+  hosts: apps
+  gather_facts: false
+  become: true
+  vars_files:
+    - ../vars/variables.yml
+
+  tasks:
+    - name: Revert Copy static index.html to the path "{{ webapp_root_dir }}"
+      file:
+        part: "{{ webapp_root_dir }}/index.html"
+        state: absent
+
+    - name: Revert Start App Server
+      service:
+        name: "{{ app_server_service }}"
+        state: stopped

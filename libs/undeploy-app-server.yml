@@ -1,0 +1,25 @@
+---
+# ./libs/undeploy-app-server.yml
+
+- name: Undeploy App Server
+  hosts: apps
+  gather_facts: false
+  become: true
+  vars_files:
+    - ../vars/variables.yml
+
+  tasks:
+    - name: Revert Create App Server web root directory
+      file:
+        path: "{{ webapp_root_dir }}"
+        state: absent
+
+    - name: Revert Enable App Server at boot
+      service:
+        name: "{{ app_server_service }}"
+        enabled: no
+
+    - name: Revert Install App Server
+      package:
+        name: "{{ app_server_service }}"
+        state: absent

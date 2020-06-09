@@ -1,0 +1,25 @@
+---
+# ./libs/undeploy-http-server.yml
+
+- name: Revert Deploy Http Server
+  hosts: apps
+  gather_facts: false
+  become: true
+  vars_files:
+    - ../vars/variables.yml
+
+  tasks:        
+    - name: Revert Start Http Server
+      service:
+        name: "{{ http_server_service }}"
+        state: stopped
+
+    - name: Revert Enable Http Server at boot
+      service:
+        name: "{{ http_server_service }}"
+        enabled: no
+
+    - name: Revert Install Http Server
+      yum:
+        name: "{{ http_server_service }}"
+        state: absent
