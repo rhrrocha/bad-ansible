@@ -23,3 +23,10 @@
       file:
         path: "{{ webapp_root_dir }}"
         state: directory
+    
+    - name: Change App Server port
+      replace:
+        path: /usr/share/tomcat/conf/server.xml
+        regexp: '(^.*Connector\sport=)"8080"'
+        replace: '\1"{{ app_server_port }}"'
+        backup: yes

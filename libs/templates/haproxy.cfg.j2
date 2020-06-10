@@ -23,7 +23,7 @@ frontend hafrontend
 
 backend app-servers
     mode http
-    balance roundrobincle
+    balance roundrobin
     option forwardfor
     {% for app_server in groups['apps'] %}
       server {{app_server}} {{app_server}}.{{GUID}}.internal:{{app_server_port}} cookie {{app_server}} check
